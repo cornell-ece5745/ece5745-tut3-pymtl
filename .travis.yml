@@ -1,0 +1,54 @@
+#=========================================================================
+# Travis CI Configuration
+#=========================================================================
+# This file configures Travis CI to automatically run the test for this
+# PyMTL project everytime we do a commit to GitHub.
+
+#------------------------------------------------------------------------
+# VM setup
+#------------------------------------------------------------------------
+
+language: python
+
+python:
+ - "3.7"
+
+#------------------------------------------------------------------------
+# install dependencies
+#------------------------------------------------------------------------
+
+install:
+
+ # Install verilator
+
+ - wget https://github.com/cornell-brg/verilator-travisci-cache/raw/master/verilator-travis-4.036.tar.gz
+ - tar -C ${HOME} -xzf verilator-travis-4.036.tar.gz
+ - export VERILATOR_ROOT=${HOME}/verilator
+ - export PATH=${VERILATOR_ROOT}/bin:${PATH}
+ - export PYMTL_VERILATOR_INCLUDE_DIR=${VERILATOR_ROOT}/share/verilator/include
+ - verilator --version
+
+ # Install PyMTL
+ - pip install -U pip
+ - pip install -U hypothesis
+ - pip install -U git+https://github.com/cornell-brg/pymtl3.git@ece5745-2021
+ - pip list
+
+#------------------------------------------------------------------------
+# before test runner
+#------------------------------------------------------------------------
+
+before_script:
+
+ # Make build directory
+
+ - mkdir -p sim/build
+ - cd sim/build
+
+#------------------------------------------------------------------------
+# test runner
+#------------------------------------------------------------------------
+
+script:
+ - py.test ..
+
