@@ -43,8 +43,7 @@ for input_value in input_values:
   # replace this with a call to the simulator's print_line_trace method.
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-  print " cycle = {}: in = {}, out = {}" \
-    .format( sim.ncycles, model.in_, model.out )
+    print( f" cycle = {model.sim_cycle_count()}: in = {model.in_}, out = {model.out}" )
 
   # Tick simulator one cycle
 
