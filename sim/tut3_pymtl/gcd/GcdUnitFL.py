@@ -26,8 +26,8 @@ class GcdUnitFL( Component ):
 
     # Queue Adapters
 
-    s.req_q  = stream.RecvQueueAdapter(GcdUnitMsgs.req) # gives a deq method to call
-    s.resp_q = stream.SendQueueAdapter(GcdUnitMsgs.resp) # gives a send method to call
+    s.req_q  = stream.fl.RecvQueueAdapter(GcdUnitMsgs.req) # gives a deq method to call
+    s.resp_q = stream.fl.SendQueueAdapter(GcdUnitMsgs.resp) # gives a send method to call
 
     s.recv //= s.req_q.recv
     s.send //= s.resp_q.send
@@ -36,9 +36,8 @@ class GcdUnitFL( Component ):
 
     @update_once
     def block():
-      if s.resp_q.enq.rdy() and s.req_q.deq.rdy():
-        msg = s.req_q.deq()
-        s.resp_q.enq( gcd(msg.a, msg.b) )
+      msg = s.req_q.deq()
+      s.resp_q.enq( gcd(msg.a, msg.b) )
 
   # Line tracing
 
